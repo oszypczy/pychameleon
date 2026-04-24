@@ -1,0 +1,29 @@
+{
+  "dataset": "t4_8k",
+  "source_csv": "external/chameleon_cluster_reference/datasets/t4.8k.csv",
+  "n_points": 8000,
+  "n_dims": 2,
+  "parameters": {
+    "k": 6,
+    "knn": 20,
+    "m": 40,
+    "alpha": 2.0
+  },
+  "runtime_seconds": 674.47,
+  "n_clusters_found": 6,
+  "cluster_sizes": {
+    "1": 2747,
+    "2": 2253,
+    "3": 1501,
+    "4": 1001,
+    "5": 249,
+    "6": 249
+  },
+  "note": "Original CHAMELEON paper benchmark; letter shapes + noise",
+  "reference_impl": "Moonpuck/chameleon_cluster",
+  "reference_commit": "1c0a65ee6a79706e4d415dd7ca78da5d3c29906d",
+  "patches_applied": [
+    "metis -> pymetis (with networkx-to-CSR adapter)",
+    "networkx 2.4+ API: graph.node -> graph.nodes"
+  ]
+}

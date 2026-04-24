@@ -1,0 +1,30 @@
+{
+  "dataset": "aggregation",
+  "source_csv": "external/chameleon_cluster_reference/datasets/Aggregation.csv",
+  "n_points": 788,
+  "n_dims": 2,
+  "parameters": {
+    "k": 7,
+    "knn": 20,
+    "m": 40,
+    "alpha": 2.0
+  },
+  "runtime_seconds": 9.95,
+  "n_clusters_found": 7,
+  "cluster_sizes": {
+    "1": 294,
+    "2": 266,
+    "3": 102,
+    "4": 49,
+    "5": 27,
+    "6": 25,
+    "7": 25
+  },
+  "note": "7 ground-truth clusters; classic chain-bridged benchmark",
+  "reference_impl": "Moonpuck/chameleon_cluster",
+  "reference_commit": "1c0a65ee6a79706e4d415dd7ca78da5d3c29906d",
+  "patches_applied": [
+    "metis -> pymetis (with networkx-to-CSR adapter)",
+    "networkx 2.4+ API: graph.node -> graph.nodes"
+  ]
+}

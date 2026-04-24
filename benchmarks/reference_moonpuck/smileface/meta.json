@@ -1,0 +1,27 @@
+{
+  "dataset": "smileface",
+  "source_csv": "external/chameleon_cluster_reference/datasets/smileface.csv",
+  "n_points": 644,
+  "n_dims": 2,
+  "parameters": {
+    "k": 4,
+    "knn": 10,
+    "m": 20,
+    "alpha": 2.0
+  },
+  "runtime_seconds": 2.09,
+  "n_clusters_found": 4,
+  "cluster_sizes": {
+    "1": 322,
+    "2": 162,
+    "3": 120,
+    "4": 40
+  },
+  "note": "Face shape: eyebrows, eyes, mouth",
+  "reference_impl": "Moonpuck/chameleon_cluster",
+  "reference_commit": "1c0a65ee6a79706e4d415dd7ca78da5d3c29906d",
+  "patches_applied": [
+    "metis -> pymetis (with networkx-to-CSR adapter)",
+    "networkx 2.4+ API: graph.node -> graph.nodes"
+  ]
+}
