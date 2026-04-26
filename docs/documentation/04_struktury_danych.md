@@ -1,8 +1,5 @@
 # 4. Struktury danych
 
-> **Wymaganie #2 z PDF prowadzącego:** *"strukturach danych wykorzystywanych do
-> przechowywania danych źródłowych oraz struktur wykorzystywanych w implementacji algorytmu"*
-
 ## 4.1. Dane źródłowe (wejście)
 
 | Atrybut          | Wartość                                            |
@@ -26,7 +23,7 @@ z plików CSV w `tests/data/` przez `np.loadtxt` (fixtures w `tests/conftest.py`
 | Etykiety klastrów               | `Labels = NDArray[int64]` shape `(n,)`        | maski boolean, sklearn convention          |
 | Kolejka priorytetowa (Faza II)  | `heapq` z `(-score, ver_i, ver_j, ci, cj)`    | `O(log m)` push/pop + lazy invalidation     |
 | Wersje klastrów                 | `dict[int, int]`                              | invalidacja przestarzałych wpisów heap'a   |
-| Cache `\|EC_Cᵢ\|`               | `dict[int, float]`                            | unikamy powtarzanych bisekcji pymetis      |
+| Cache `|EC_Cᵢ|`               | `dict[int, float]`                            | unikamy powtarzanych bisekcji pymetis      |
 
 `adjacency[i]` to tablica indeksów sąsiadów wierzchołka `i`; `edge_weights[i][j]`
 to waga krawędzi `(i, adjacency[i][j])`. Reprezentacja symetryczna: jeśli

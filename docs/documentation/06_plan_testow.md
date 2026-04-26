@@ -4,14 +4,14 @@ Strategia walidacji jest 5-warstwowa, realizowana w `tests/` przy użyciu `pytes
 `pytest-cov`, `numpy.testing`, `sklearn.utils.estimator_checks` oraz
 `sklearn.metrics.adjusted_rand_score`.
 
-| Warstwa            | Cel                                                          | Liczba testów / próg                | Status na 26.04.2026                  |
-|--------------------|--------------------------------------------------------------|--------------------------------------|---------------------------------------|
-| Jednostkowe        | Każdy moduł osobno z fixture'ami i hand-computed wartościami | ~25 (5 modułów × ~5 testów)         | szkielet w `tests/`, treść w Etap 2  |
-| Integracyjne (e2e) | `Chameleon().fit(X)` na 3 datasetach                         | 7 testów; ARI vs ground truth > 0.85| 12 testów na skeletonie pass         |
-| sklearn-compat     | `check_estimator(Chameleon())` — pełna suite zgodności       | ~30 wewnętrznych testów             | szkielet, odblokowany po `fit()`      |
-| Porównawcze        | Wyniki nasze vs Moonpuck na tych samych parametrach          | 3 datasety × `ARI > 0.9`            | Etap 2                                |
-| Parametryczne      | Sweep `k_nn`, `α`, `min_cluster_size`                        | 3 sweep'y × ~5 wartości             | Etap 2                                |
-| Skalowalności      | `n` vs runtime; weryfikacja slope log-log ≈ 1.1              | 6 punktów `n ∈ [100, 50000]`        | Etap 2                                |
+| Warstwa             | Cel                                              | Liczba / próg                        | Status (26.04)              |
+|---------------------|--------------------------------------------------|--------------------------------------|------------------------------|
+| Jednostkowe         | Każdy moduł osobno; hand-computed wartości       | ~25 (5 modułów × ~5)                 | szkielet, treść w Etap 2     |
+| Integracyjne (e2e)  | `fit()` na 3 datasetach                          | 7 testów; ARI > 0.85 vs ground truth | 12 testów skeleton pass      |
+| sklearn-compat      | `check_estimator(Chameleon())`                   | ~30 wewnętrznych                     | po implementacji `fit()`     |
+| Porównawcze         | Wyniki vs Moonpuck na tych samych parametrach    | 3 datasety × ARI > 0.9               | Etap 2                       |
+| Parametryczne       | Sweep `k_nn`, `α`, `min_cluster_size`            | 3 sweep'y × ~5 wartości              | Etap 2                       |
+| Skalowalności       | `n` vs runtime; slope log-log ≈ 1.1              | 6 punktów `n ∈ [100, 50000]`         | Etap 2                       |
 
 **Pokrycie kodu (target):** `pytest --cov=pychameleon` ≥ **90% linii**.
 

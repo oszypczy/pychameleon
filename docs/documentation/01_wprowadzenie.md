@@ -4,10 +4,7 @@
 
 Celem jest opracowanie projektu implementacji oraz pełnej implementacji
 hierarchicznego algorytmu klasteryzacji **CHAMELEON** (Karypis, Han, Kumar 1999)
-w nowoczesnej konwencji Pythona, ze zgodnością ze scikit-learn API. Projekt
-podzielony jest na: Etap 1 (08.05.2026, 15 pkt) — niniejsza dokumentacja
-projektowa + prezentacja; Etap 2 (02.06.2026, 30 pkt) — pełna implementacja
-i eksperymenty.
+w nowoczesnej konwencji Pythona, ze zgodnością ze scikit-learn API.
 
 ## 1.2. Miejsce CHAMELEON-a wśród algorytmów klasteryzacji
 

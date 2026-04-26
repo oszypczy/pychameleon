@@ -1,7 +1,5 @@
 # 5. Ocena efektywności
 
-> **Wymaganie #3 z PDF prowadzącego:** *"ocenę efektywności proponowanego rozwiązania"*
-
 ## 5.1. Złożoność teoretyczna (paper §4.5)
 
 Niech `n` — liczba punktów, `m` — sub-klastrów po Fazie I (typowo `m ≈ n/20`),
@@ -19,9 +17,8 @@ vs `10⁸` przy `O(n²)` — różnica 3 rzędów wielkości.
 
 ## 5.2. Empiryczne benchmarki implementacji referencyjnej
 
-Przygotowując projekt uruchomiliśmy implementację referencyjną Moonpuck
-([github.com/Moonpuck/chameleon_cluster](https://github.com/Moonpuck/chameleon_cluster),
-commit `1c0a65e`) na 3 zbiorach. Wyniki w `benchmarks/reference_moonpuck/`:
+Przygotowując projekt uruchomiłem implementację referencyjną Moonpuck
+([link](https://github.com/Moonpuck/chameleon_cluster)) na 3 zbiorach. Wyniki w `benchmarks/reference_moonpuck/`:
 
 | Zbiór       | n    | k | k_nn | m  | α   | Runtime (s) | Bottleneck                |
 |-------------|------|---|------|-----|-----|-------------|---------------------------|
@@ -42,8 +39,7 @@ Główne planowane optymalizacje:
 3. **Lazy invalidation kolejki** — zamiast `O(m²)` rebuildu po każdym scaleniu.
 4. **numpy ufuncs** zamiast pętli Pythona w `metrics.py` — stała ~10–50×.
 
-**Spodziewany całkowity speedup vs Moonpuck:** **50–100×** dla `n = 8000`
-(z 11 minut → ~7–15 sekund).
+**Spodziewany całkowity speedup vs Moonpuck:** **50–100×**
 
 ## 5.4. Ograniczenia
 

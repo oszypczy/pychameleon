@@ -14,9 +14,6 @@ strony 1–2.
   **przed** terminem konsultacji
 - **Termin konsultacji** wymaga uprzedniego uzgodnienia z prowadzącym
 
-> Cytat z PDF (str. 2): *"Przed prezentacją należy uzgodnić z prowadzącym dokładny
-> termin oraz wgrać odpowiednio wcześniej dokumentację projektu implementacji algorytmu."*
-
 ## Wymagana zawartość prezentacji
 
 Prezentacja musi obejmować trzy obowiązkowe sekcje (PDF prowadzącego, str. 1–2):
