@@ -11,7 +11,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DOC_DIR="$REPO_ROOT/docs/documentation"
 OUT_PDF="$DOC_DIR/dokumentacja.pdf"
-IMG_DIR="$REPO_ROOT/docs/presentation/images"
+IMG_DIR="$REPO_ROOT/docs/documentation/images"
 
 # Sprawdz dostepnosc pandoc
 if ! command -v pandoc &> /dev/null; then
@@ -58,8 +58,6 @@ pandoc "${FILES[@]}" \
     --variable=linkcolor:blue \
     --variable=urlcolor:blue \
     --variable=toccolor:black \
-    --toc \
-    --toc-depth=2 \
     --number-sections \
     --no-highlight \
     --resource-path=".:$IMG_DIR" \
