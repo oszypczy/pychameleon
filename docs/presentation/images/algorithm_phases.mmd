@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    actor User
+    participant Cham as Chameleon.fit(X)
+    participant Graph as graph.knn_graph
+    participant Part as partition.initial_subclusters
+    participant Merge as merger.merge_to_k_clusters
+    participant Metr as metrics.merge_score
+    participant Pymetis
+
+    User->>Cham: fit(X)
+    Cham->>Cham: _validate_params()
+    Cham->>Cham: _validate_data(X)
+    Note over Cham: Faza 0: budowa grafu k-NN
+    Cham->>Graph: knn_graph(X, k_nn)
+    Graph->>Graph: KDTree.query(X, k+1)
+    Graph-->>Cham: (adjacency, edge_weights)
+    Note over Cham: Faza I: bisekcja na sub-klastry
+    Cham->>Part: initial_subclusters(adj, weights, min_size)
+    loop while max(cluster_sizes) > min_size
+        Part->>Pymetis: part_graph(2, ...)
+        Pymetis-->>Part: (cut, partition)
+    end
+    Part-->>Cham: initial_labels (m sub-klastrów)
+    Note over Cham: Faza II: aglomeracja
+    Cham->>Merge: merge_to_k_clusters(adj, weights, init_labels, k, α)
+    loop while n_clusters > target_k
+        Merge->>Metr: merge_score(ci, cj, α)
+        Metr->>Pymetis: part_graph(2, ...) for EC_Ci/EC_Cj
+        Pymetis-->>Metr: cut sizes
+        Metr-->>Merge: RI · RC^α
+        Merge->>Merge: heappop, merge pair
+    end
+    Merge-->>Cham: labels_
+    Cham-->>User: self

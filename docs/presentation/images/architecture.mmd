@@ -1,0 +1,38 @@
+flowchart TB
+    subgraph Public_API["pychameleon (publiczne API)"]
+        CHAM["chameleon.py<br/><b>class Chameleon</b><br/>(ClusterMixin, BaseEstimator)<br/>§4 całość"]
+    end
+
+    subgraph Phase0["Faza 0 — graf k-NN (§4.2)"]
+        GRAPH["graph.py<br/><b>knn_graph(X, k)</b><br/>scipy.spatial.KDTree<br/>O(n log n)"]
+    end
+
+    subgraph Phase1["Faza I — bisekcja (§4.4)"]
+        PART["partition.py<br/><b>initial_subclusters</b><br/>rekurencyjna bisekcja<br/>pymetis · O(n log²n)"]
+    end
+
+    subgraph Phase2["Faza II — aglomeracja (§4.4)"]
+        MERG["merger.py<br/><b>merge_to_k_clusters</b><br/>heapq + lazy invalidation<br/>O(m² log m)"]
+        METR["metrics.py<br/><b>RI · RC^α</b> (§4.3)<br/>relative_interconnectivity<br/>relative_closeness<br/>merge_score"]
+    end
+
+    TYPES["_types.py<br/>FloatMatrix · Labels<br/>AdjacencyList · EdgeWeights"]
+
+    CHAM -->|X<br/>n × d| GRAPH
+    GRAPH -->|adjacency<br/>edge_weights| PART
+    PART -->|initial_labels| MERG
+    MERG <-.->|RI/RC/score| METR
+    MERG -->|labels_| CHAM
+
+    TYPES -.-> GRAPH
+    TYPES -.-> PART
+    TYPES -.-> METR
+    TYPES -.-> MERG
+    TYPES -.-> CHAM
+
+    style CHAM fill:#e1f5ff,stroke:#0288d1,stroke-width:2px
+    style GRAPH fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1px
+    style PART fill:#fff9c4,stroke:#f57c00,stroke-width:1px
+    style METR fill:#c8e6c9,stroke:#388e3c,stroke-width:1px
+    style MERG fill:#ffccbc,stroke:#d84315,stroke-width:1px
+    style TYPES fill:#f5f5f5,stroke:#616161,stroke-width:1px,stroke-dasharray: 5 5
