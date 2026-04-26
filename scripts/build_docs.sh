@@ -58,7 +58,6 @@ pandoc "${FILES[@]}" \
     --variable=linkcolor:blue \
     --variable=urlcolor:blue \
     --variable=toccolor:black \
-    --number-sections \
     --no-highlight \
     --resource-path=".:$IMG_DIR" \
     --metadata title="Projekt implementacji algorytmu CHAMELEON" \
