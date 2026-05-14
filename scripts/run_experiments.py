@@ -47,6 +47,7 @@ from pychameleon._datasets import ALL_DATASETS, Dataset, load
 
 REPO = Path(__file__).resolve().parent.parent
 RESULTS_DIR = REPO / "results"
+LABELS_DIR = RESULTS_DIR / "labels"
 MOONPUCK_DIR = REPO / "benchmarks" / "reference_moonpuck"
 
 
@@ -146,37 +147,69 @@ class CSVStore:
 # ---------------------------------------------------------------------------
 
 DEFAULT_PARAMS: dict[str, dict[str, Any]] = {
-    # Aggregation, smileface, t4_8k: parametry zgodne z Moonpuck benchmark
+    # aggregation, t4_8k: parametry zgodne z Moonpuck benchmark
     # (z benchmarks/reference_moonpuck/<name>/meta.json) — zachowane dla
-    # uczciwego porównania.
+    # uczciwego porównania referencyjnego.
     "aggregation": {"n_clusters": 7, "k_nn": 20, "min_cluster_size": 20, "alpha": 2.0},
-    "smileface": {"n_clusters": 4, "k_nn": 10, "min_cluster_size": 32, "alpha": 2.0},
     "t4_8k": {"n_clusters": 6, "k_nn": 20, "min_cluster_size": 200, "alpha": 2.0},
-    # DS1/DS3/DS4/DS5: parametry zoptymalizowane per-dataset na podstawie
-    # niezależnych sweepów (notebooks/03_sweepy_parametrow.ipynb).
-    # Synchronizowane z notebooks/_helpers.py:DEFAULT_PARAMS.
-    "ds1": {"n_clusters": 6, "k_nn": 30, "min_cluster_size": 80, "alpha": 1.0},
-    "ds3": {"n_clusters": 6, "k_nn": 10, "min_cluster_size": 80, "alpha": 2.5},
-    "ds4": {"n_clusters": 8, "k_nn": 10, "min_cluster_size": 400, "alpha": 0.5},
-    "ds5": {"n_clusters": 8, "k_nn": 20, "min_cluster_size": 160, "alpha": 2.0},
+    # smileface: parametry z HPO 2026-05-14 (ARI vs Moonpuck reference;
+    # results/hpo_moonpuck.json). Δ ARI vs Moonpuck: +0.28.
+    "smileface": {"n_clusters": 4, "k_nn": 50, "min_cluster_size": 160, "alpha": 2.5},
+    # DS1/DS3/DS4/DS5: parametry z HPO 2026-05-14 (ARI vs ground truth;
+    # results/hpo_best.json). Synchronizowane z notebooks/_helpers.py.
+    "ds1": {"n_clusters": 6, "k_nn": 20, "min_cluster_size": 80, "alpha": 0.5},
+    "ds3": {"n_clusters": 6, "k_nn": 15, "min_cluster_size": 40, "alpha": 0.5},
+    "ds4": {"n_clusters": 9, "k_nn": 10, "min_cluster_size": 160, "alpha": 2.5},
+    "ds5": {"n_clusters": 8, "k_nn": 30, "min_cluster_size": 40, "alpha": 3.0},
+}
+
+
+_MOONPUCK_MAP = {
+    "aggregation": "aggregation",
+    "smileface": "smileface",
+    "t4_8k": "t4_8k",
 }
 
 
 def _moonpuck_labels(name: str) -> np.ndarray | None:
     """Return Moonpuck reference labels for a dataset, or ``None`` if absent."""
-    # Map our dataset keys to Moonpuck output dirs.
-    moonpuck_map = {
-        "aggregation": "aggregation",
-        "smileface": "smileface",
-        "t4_8k": "t4_8k",
-    }
-    key = moonpuck_map.get(name)
+    key = _MOONPUCK_MAP.get(name)
     if key is None:
         return None
     path = MOONPUCK_DIR / key / "labels.csv"
     if not path.exists():
         return None
     return np.loadtxt(path, delimiter=",", skiprows=1, usecols=(2,), dtype=np.int64)
+
+
+def _moonpuck_runtime(name: str) -> float:
+    """Return Moonpuck runtime in seconds from meta.json, or NaN if absent."""
+    import json
+    key = _MOONPUCK_MAP.get(name)
+    if key is None:
+        return float("nan")
+    path = MOONPUCK_DIR / key / "meta.json"
+    if not path.exists():
+        return float("nan")
+    with path.open() as f:
+        meta = json.load(f)
+    val = meta.get("runtime_seconds")
+    return float(val) if val is not None else float("nan")
+
+
+def _save_labels(name: str, X: np.ndarray, labels: np.ndarray) -> None:
+    """Persist (x_0, ..., x_{d-1}, label) per point for downstream notebooks."""
+    LABELS_DIR.mkdir(parents=True, exist_ok=True)
+    out = np.column_stack([X, labels.astype(np.int64)])
+    header = ",".join([f"x{i}" for i in range(X.shape[1])] + ["label"])
+    np.savetxt(
+        LABELS_DIR / f"{name}.csv",
+        out,
+        delimiter=",",
+        header=header,
+        comments="",
+        fmt=["%.10g"] * X.shape[1] + ["%d"],
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -187,7 +220,7 @@ def _moonpuck_labels(name: str) -> np.ndarray | None:
 COMPARE_HEADER = [
     "dataset", "paper_name", "n", "n_clusters_target",
     "k_nn", "min_cluster_size", "alpha",
-    "runtime_s", "n_clusters_found",
+    "runtime_s", "runtime_moonpuck_s", "n_clusters_found",
     "ari", "nmi", "ami", "homogeneity", "completeness", "v_measure",
     "silhouette", "calinski_harabasz", "davies_bouldin",
     "ari_vs_moonpuck",
@@ -219,6 +252,7 @@ def cmd_compare(args: argparse.Namespace) -> None:
         ari_ref = (
             float(adjusted_rand_score(ref, labels)) if ref is not None else float("nan")
         )
+        _save_labels(name, ds.X, labels)
 
         row = {
             "dataset": name,
@@ -229,6 +263,7 @@ def cmd_compare(args: argparse.Namespace) -> None:
             "min_cluster_size": params["min_cluster_size"],
             "alpha": params["alpha"],
             "runtime_s": round(elapsed, 4),
+            "runtime_moonpuck_s": _moonpuck_runtime(name),
             "ari_vs_moonpuck": ari_ref,
             **metrics,
         }
