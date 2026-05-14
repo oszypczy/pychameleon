@@ -20,6 +20,7 @@ import time
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -84,7 +85,8 @@ def run_one(name: str, spec: dict, force: bool) -> None:
     fig, ax = plt.subplots(figsize=(10, 8))
     ax.scatter(res[0], res[1], c=res["cluster"], cmap="tab10", s=10)
     ax.set_title(f"{name} - Moonpuck CHAMELEON {spec['params']} - {elapsed:.1f}s")
-    ax.set_xlabel("x"); ax.set_ylabel("y")
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
     fig.tight_layout()
     fig.savefig(out_dir / "plot.png", dpi=100)
     plt.close(fig)

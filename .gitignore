@@ -30,6 +30,10 @@ htmlcov/
 
 # Experiments
 experiments/results/
+results/
+
+# Jupyter
+.ipynb_checkpoints/
 
 # Editor / OS
 .vscode/

@@ -10,7 +10,16 @@ dominates runtime on large inputs.
 """
 from __future__ import annotations
 
+import numpy as np
+from scipy.spatial import cKDTree
+
 from pychameleon._types import AdjacencyList, EdgeWeights, FloatMatrix
+
+# Cap for inverse-distance weight when two points coincide. Treating distance==0
+# as "infinitely similar" with a finite, large weight keeps pymetis happy
+# (it requires positive integer weights after quantization) without losing
+# the qualitative ranking (duplicates remain the most-similar pair).
+_DUPLICATE_WEIGHT = 1e12
 
 
 def knn_graph(X: FloatMatrix, k: int) -> tuple[AdjacencyList, EdgeWeights]:
@@ -31,4 +40,42 @@ def knn_graph(X: FloatMatrix, k: int) -> tuple[AdjacencyList, EdgeWeights]:
         ``edge_weights[i][j]`` is the similarity between ``i`` and
         ``adjacency[i][j]``, computed as ``1 / euclidean_distance``.
     """
-    raise NotImplementedError("knn_graph will be implemented in module phase")
+    n = X.shape[0]
+    if k >= n:
+        raise ValueError(f"k={k} must be smaller than n_samples={n}")
+
+    tree = cKDTree(X)
+    # Query k+1 neighbors so we can drop the trivial self-match at index 0.
+    distances, indices = tree.query(X, k=k + 1)
+
+    # Build directed neighbor sets first, then symmetrize.
+    neighbors: list[set[int]] = [set() for _ in range(n)]
+    weights_map: list[dict[int, float]] = [{} for _ in range(n)]
+
+    for i in range(n):
+        for dist, j in zip(distances[i, 1:], indices[i, 1:], strict=True):
+            j_int = int(j)
+            if j_int == i:  # safeguard against degenerate query results
+                continue
+            w = _DUPLICATE_WEIGHT if dist == 0.0 else 1.0 / float(dist)
+            # Symmetrize: write the edge in both directions, keeping the larger
+            # of the two weights (they should agree, but rounding can differ).
+            for src, dst in ((i, j_int), (j_int, i)):
+                if dst not in neighbors[src]:
+                    neighbors[src].add(dst)
+                    weights_map[src][dst] = w
+                else:
+                    weights_map[src][dst] = max(weights_map[src][dst], w)
+
+    adjacency: AdjacencyList = []
+    edge_weights: EdgeWeights = []
+    for i in range(n):
+        sorted_neighbors = np.array(sorted(neighbors[i]), dtype=np.int64)
+        sorted_weights = np.array(
+            [weights_map[i][int(j)] for j in sorted_neighbors],
+            dtype=np.float64,
+        )
+        adjacency.append(sorted_neighbors)
+        edge_weights.append(sorted_weights)
+
+    return adjacency, edge_weights

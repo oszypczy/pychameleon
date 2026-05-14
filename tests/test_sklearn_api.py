@@ -10,12 +10,9 @@ prerequisite for any scikit-learn-contrib PR.
 """
 from __future__ import annotations
 
-import pytest
-
 from pychameleon import Chameleon
 
 
-@pytest.mark.skip(reason="enable once Chameleon.fit is implemented")
 def test_check_estimator() -> None:
     from sklearn.utils.estimator_checks import check_estimator
 

@@ -43,6 +43,10 @@ experiments = [
     "tqdm>=4.65",
     "seaborn>=0.13",
     "pyyaml>=6.0",
+    "jupyter>=1.0",
+    "notebook>=7.0",
+    "nbstripout>=0.7",
+    "nbconvert>=7.0",
 ]
 dev = [
     "pytest>=7.4",
@@ -92,6 +96,8 @@ select = [
 # Allow ML-standard uppercase X, Y, etc. (scikit-learn convention)
 "src/**" = ["N803", "N806"]
 "tests/**" = ["N802", "N803", "N806"]
+"scripts/**" = ["N803", "N806"]
+"notebooks/**" = ["N803", "N806"]
 
 [tool.mypy]
 strict = true

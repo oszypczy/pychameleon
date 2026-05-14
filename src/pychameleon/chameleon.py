@@ -17,7 +17,9 @@ import numpy as np
 from numpy.typing import ArrayLike
 from sklearn.base import BaseEstimator, ClusterMixin
 from sklearn.utils._param_validation import Interval
+from sklearn.utils.validation import validate_data
 
+from pychameleon import graph, merger, metrics, partition
 from pychameleon._types import Labels
 
 
@@ -121,27 +123,30 @@ class Chameleon(ClusterMixin, BaseEstimator):  # type: ignore[misc]
             The fitted estimator.
         """
         self._validate_params()
-        X_arr = self._validate_data(X, accept_sparse=False, dtype=np.float64)
+        X_arr = validate_data(self, X, accept_sparse=False, dtype=np.float64)
         n_samples = X_arr.shape[0]
 
         min_size = self._resolve_min_cluster_size(n_samples)
+        # Cap k_nn at n_samples - 1 so very small inputs still work (sklearn's
+        # check_estimator hits this with n=10 against the default k_nn=10).
+        effective_k = min(self.k_nn, max(1, n_samples - 1))
+
+        # Reset the per-fit cache so internal-bisector results don't leak
+        # across calls or estimator instances.
+        metrics.reset_cache()
 
         # Phase 0: build sparse k-NN graph (§4.2)
-        # adjacency, edge_weights = graph.knn_graph(X_arr, self.k_nn)
+        adjacency, edge_weights = graph.knn_graph(X_arr, effective_k)
 
         # Phase I: recursively bisect into sub-clusters (§4.4)
-        # initial_labels = partition.initial_subclusters(adjacency, edge_weights, min_size)
+        initial_labels = partition.initial_subclusters(adjacency, edge_weights, min_size)
 
         # Phase II: agglomeratively merge with dynamic modeling (§4.4)
-        # self.labels_ = merger.merge_to_k_clusters(
-        #     adjacency, edge_weights, initial_labels, self.n_clusters, self.alpha
-        # )
-
-        # Placeholder until modules are implemented.
-        _ = min_size
-        raise NotImplementedError(
-            "Chameleon.fit() — core modules not yet implemented. See roadmap in docs."
+        self.labels_ = merger.merge_to_k_clusters(
+            adjacency, edge_weights, initial_labels, self.n_clusters, self.alpha
         )
+        self.n_clusters_ = int(np.unique(self.labels_).shape[0])
+        return self
 
     def fit_predict(self, X: ArrayLike, y: None = None) -> Labels:
         """Convenience: ``self.fit(X).labels_``."""
