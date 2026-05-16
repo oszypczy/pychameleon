@@ -147,10 +147,12 @@ class CSVStore:
 # ---------------------------------------------------------------------------
 
 DEFAULT_PARAMS: dict[str, dict[str, Any]] = {
-    # aggregation, t4_8k: parametry zgodne z Moonpuck benchmark
-    # (z benchmarks/reference_moonpuck/<name>/meta.json) — zachowane dla
-    # uczciwego porównania referencyjnego.
-    "aggregation": {"n_clusters": 7, "k_nn": 20, "min_cluster_size": 20, "alpha": 2.0},
+    # aggregation: parametry z HPO 2026-05-16 (ARI vs prawdziwy GT z UEF
+    # Gionis 2007; results/aggregation_hpo_best.json). ARI=0.961.
+    "aggregation": {"n_clusters": 7, "k_nn": 10, "min_cluster_size": 40, "alpha": 0.5},
+    # t4_8k: parametry zgodne z Moonpuck benchmark
+    # (z benchmarks/reference_moonpuck/t4_8k/meta.json) — zachowane dla
+    # uczciwego porównania referencyjnego (ARI vs Moonpuck, sekcja 2 nb 02).
     "t4_8k": {"n_clusters": 6, "k_nn": 20, "min_cluster_size": 200, "alpha": 2.0},
     # smileface: parametry z HPO 2026-05-14 (ARI vs Moonpuck reference;
     # results/hpo_moonpuck.json). Δ ARI vs Moonpuck: +0.28.

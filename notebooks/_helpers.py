@@ -75,6 +75,8 @@ def load_ground_truth(name: str) -> pd.DataFrame | None:
         "ds3": "cluto-t4-8k",
         "ds4": "cluto-t7-10k",
         "ds5": "cluto-t8-8k",
+        "aggregation": "aggregation-gt",
+        "t4_8k": "cluto-t4-8k",  # same point cloud as ds3
     }
     key = karypis_map.get(name)
     if key is None:

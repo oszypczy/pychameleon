@@ -46,9 +46,18 @@ def _load_karypis(name: str, paper_name: str) -> Dataset:
 
 
 def load_aggregation() -> Dataset:
-    """788-point Aggregation (Gionis et al. 2007). No ground truth in CSV."""
-    X = _load_csv_xy(DATA_DIR / "Aggregation.csv", sep=" ")
-    return Dataset(name="aggregation", X=X, y=None)
+    """788-point Aggregation (Gionis et al. 2007), 7 classes.
+
+    GT pochodzi z UEF clustering datasets (cs.joensuu.fi/sipu/datasets/) i
+    pokrywa się 1:1 z punktami w ``tests/data/Aggregation.csv``.
+    """
+    arr = np.loadtxt(
+        KARYPIS_DIR / "aggregation-gt.csv",
+        delimiter=",", skiprows=1, dtype=np.float64,
+    )
+    X = arr[:, :2].astype(np.float64)
+    y = arr[:, 2].astype(np.int64)
+    return Dataset(name="aggregation", X=X, y=y, paper_name="Aggregation")
 
 
 def load_smileface() -> Dataset:
