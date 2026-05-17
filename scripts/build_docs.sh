@@ -34,10 +34,10 @@ FILES=(
     "01_wprowadzenie.md"
     "02_algorytm.md"
     "03_implementacja.md"
-    "04_struktury_danych.md"
-    "05_efektywnosc.md"
-    "06_plan_testow.md"
-    "07_zbiory_danych.md"
+    "04_instrukcja.md"
+    "05_zbiory_danych.md"
+    "06_wyniki.md"
+    "07_wnioski.md"
     "08_bibliografia.md"
 )
 
@@ -63,7 +63,7 @@ pandoc "${FILES[@]}" \
     --metadata title="Projekt implementacji algorytmu CHAMELEON" \
     --metadata author="Oliwier Szypczyn" \
     --metadata date="$(date +%Y-%m-%d)" \
-    --metadata subtitle="Metody Eksploracji Danych — Etap 1"
+    --metadata subtitle="Metody Eksploracji Danych — Dokumentacja końcowa"
 
 if [[ -f "$OUT_PDF" ]]; then
     PAGES=$(mdls -name kMDItemNumberOfPages "$OUT_PDF" 2>/dev/null | awk '{print $3}')

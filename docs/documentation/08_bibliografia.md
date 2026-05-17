@@ -25,3 +25,29 @@
     in Python.* Nature Methods 17, 2020, str. 261–272. [`scipy.spatial.KDTree`]
 
 [8] **Klockner A.** *PyMETIS: Python wrapper for METIS.* PyPI, <https://pypi.org/project/PyMetis/>.
+
+[9] **University of Eastern Finland.** *Clustering benchmark datasets.* Joensuu, 2008–2024.
+    <https://cs.joensuu.fi/sipu/datasets/> [ground truth dla zbioru Aggregation]
+
+[10] **Karypis G.** *CLUTO — Clustering Software.* Univ. of Minnesota, 1999.
+    [zbiory DS1/DS3/DS4/DS5 — `t5.8k`, `t4.8k`, `t7.10k`, `t8.8k`]
+
+## Kod źródłowy
+
+Pełen kod źródłowy pakietu znajduje się w repozytorium:
+
+<https://github.com/oszypczy/pychameleon>
+
+Struktura:
+
+```
+src/pychameleon/      kod produkcyjny (5 modułów + types + datasets)
+tests/                36 testów jednostkowych + e2e + sklearn-compat
+scripts/              run_experiments.py, run_hpo.py, export_figures.py
+notebooks/            3 notebooki analityczne
+benchmarks/           reference_moonpuck — wyniki implementacji ref.
+results/              CSV z wynikami eksperymentów (8 plików)
+docs/                 niniejsza dokumentacja
+```
+
+Repozytorium zawiera kompletny zestaw skryptów do reprodukcji wszystkich wyników z rozdziału 6 — patrz rozdz. 4.4.
