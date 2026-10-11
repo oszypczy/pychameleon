@@ -17,6 +17,10 @@ pip install chameleon-cluster   # with pip
 
 The distribution is named `chameleon-cluster`; the import name is `pychameleon`.
 
+> **Windows:** the `pymetis` dependency has no Windows wheels on PyPI. Install it
+> from conda-forge first (`conda install -c conda-forge pymetis`), then
+> `pip install chameleon-cluster`.
+
 ## Quick start
 
 ```python
