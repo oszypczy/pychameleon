@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "chameleon-cluster: CHAMELEON hierarchical clustering for Python"
+abstract: >-
+  A Python implementation of the CHAMELEON hierarchical clustering
+  algorithm (Karypis, Han & Kumar, 1999) with a scikit-learn compatible API.
+authors:
+  - family-names: Szypczyn
+    given-names: Oliwier
+version: 0.1.1
+date-released: 2026-10-11
+license: MIT
+repository-code: "https://github.com/oszypczy/pychameleon"
+url: "https://chameleon-cluster.readthedocs.io"
+keywords:
+  - clustering
+  - hierarchical clustering
+  - scikit-learn
+  - chameleon
+references:
+  - type: article
+    title: "Chameleon: hierarchical clustering using dynamic modeling"
+    authors:
+      - family-names: Karypis
+        given-names: George
+      - family-names: Han
+        given-names: Eui-Hong
+      - family-names: Kumar
+        given-names: Vipin
+    journal: Computer
+    volume: 32
+    issue: 8
+    start: 68
+    end: 75
+    year: 1999
+    doi: 10.1109/2.781637

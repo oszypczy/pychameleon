@@ -38,6 +38,14 @@ tools such as :class:`~sklearn.model_selection.GridSearchCV`.
        ax.set_title(name)
        ax.set_xticks([]); ax.set_yticks([])
 
+Citing
+------
+
+If you use chameleon-cluster in your work, please cite the original paper
+and this software; citation metadata is in
+`CITATION.cff <https://github.com/oszypczy/pychameleon/blob/main/CITATION.cff>`_
+(GitHub shows a *Cite this repository* button for it).
+
 .. toctree::
    :maxdepth: 2
 

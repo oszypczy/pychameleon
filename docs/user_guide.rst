@@ -87,6 +87,10 @@ Practical notes
 - Phase II recomputes merge scores after each merge, so runtime grows
   quickly with the number of Phase I sub-clusters (``1 / min_cluster_size``).
   With the defaults, fitting 20 000 2-D points takes a few seconds.
+- Results are deterministic: fitting the same data with the same parameters
+  gives identical labels, because METIS runs with a fixed internal seed.
+  That is why there is no ``random_state`` parameter. Labels may still
+  differ across pymetis/METIS versions or platforms.
 - Like other clusterers without a ``predict`` method (e.g.
   :class:`~sklearn.cluster.AgglomerativeClustering`), the model labels the
   data it was fit on; use :meth:`~pychameleon.Chameleon.fit_predict`.

@@ -67,6 +67,12 @@ uv run mypy src/        # type check
 - Karypis, G., Han, E.-H., & Kumar, V. (1999). *Chameleon: hierarchical clustering using dynamic modeling*. Computer, 32(8), 68–75.
 - Karypis, G., & Kumar, V. (1998). *A fast and high quality multilevel scheme for partitioning irregular graphs*. SIAM J. Sci. Comput., 20(1), 359–392.
 
+## Citing
+
+If you use this package, please cite the original paper (above) and this
+software — see [`CITATION.cff`](CITATION.cff) or the *Cite this repository*
+button on GitHub.
+
 ## License
 
 MIT
