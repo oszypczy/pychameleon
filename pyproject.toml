@@ -39,6 +39,12 @@ dependencies = [
 
 [project.optional-dependencies]
 viz = ["matplotlib>=3.7"]
+docs = [
+    "sphinx>=8.0",
+    "pydata-sphinx-theme>=0.16",
+    "numpydoc>=1.8",
+    "matplotlib>=3.7",
+]
 experiments = [
     "pandas>=2.0",
     "tqdm>=4.65",
@@ -59,6 +65,7 @@ dev = [
 
 [project.urls]
 Homepage = "https://github.com/oszypczy/pychameleon"
+Documentation = "https://chameleon-cluster.readthedocs.io"
 Repository = "https://github.com/oszypczy/pychameleon"
 Issues = "https://github.com/oszypczy/pychameleon/issues"
 

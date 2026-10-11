@@ -1,5 +1,11 @@
 # pychameleon
 
+[![PyPI](https://img.shields.io/pypi/v/chameleon-cluster)](https://pypi.org/project/chameleon-cluster/)
+[![CI](https://github.com/oszypczy/pychameleon/actions/workflows/ci.yml/badge.svg)](https://github.com/oszypczy/pychameleon/actions/workflows/ci.yml)
+[![Docs](https://readthedocs.org/projects/chameleon-cluster/badge/?version=latest)](https://chameleon-cluster.readthedocs.io)
+
+**Documentation:** https://chameleon-cluster.readthedocs.io
+
 Implementation of the CHAMELEON hierarchical clustering algorithm ([Karypis, Han, Kumar, 1999](https://glaros.dtc.umn.edu/gkhome/fetch/papers/chameleonCOMPUTER99.pdf)) with a scikit-learn compatible API.
 
 CHAMELEON discovers clusters of arbitrary shapes, densities, and sizes by using a two-phase approach:
