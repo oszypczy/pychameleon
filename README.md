@@ -2,7 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/chameleon-cluster)](https://pypi.org/project/chameleon-cluster/)
 [![CI](https://github.com/oszypczy/pychameleon/actions/workflows/ci.yml/badge.svg)](https://github.com/oszypczy/pychameleon/actions/workflows/ci.yml)
-[![Docs](https://readthedocs.org/projects/chameleon-cluster/badge/?version=latest)](https://chameleon-cluster.readthedocs.io)
+[![Docs](https://img.shields.io/readthedocs/chameleon-cluster)](https://chameleon-cluster.readthedocs.io)
 
 **Documentation:** https://chameleon-cluster.readthedocs.io
 

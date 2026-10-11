@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "chameleon-cluster"
-version = "0.1.1"
+version = "0.1.2"
 description = "CHAMELEON hierarchical clustering using dynamic modeling"
 readme = "README.md"
 license = "MIT"

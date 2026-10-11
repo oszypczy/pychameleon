@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.1.2 (2026-10-11)
+------------------
+
+Documentation and packaging only — no changes to the algorithm or API.
+
+- Releases are archived on Zenodo with a citable DOI; ``CITATION.cff``
+  added.
+- Documentation notes that results are deterministic.
+- Fixed the documentation badge in the README.
+
 0.1.1 (2026-10-11)
 ------------------
 
