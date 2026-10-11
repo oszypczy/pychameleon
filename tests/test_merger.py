@@ -15,13 +15,7 @@ import pytest
 
 from pychameleon.graph import knn_graph
 from pychameleon.merger import merge_to_k_clusters
-from pychameleon.metrics import reset_cache
 from pychameleon.partition import initial_subclusters
-
-
-@pytest.fixture(autouse=True)
-def _clean_cache() -> None:
-    reset_cache()
 
 
 @pytest.fixture

@@ -246,6 +246,62 @@ wheels = [
 ]
 
 [[package]]
+name = "chameleon-cluster"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "numpy" },
+    { name = "pymetis" },
+    { name = "scikit-learn" },
+    { name = "scipy" },
+]
+
+[package.optional-dependencies]
+dev = [
+    { name = "mypy" },
+    { name = "pre-commit" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "ruff" },
+]
+experiments = [
+    { name = "jupyter" },
+    { name = "nbconvert" },
+    { name = "nbstripout" },
+    { name = "notebook" },
+    { name = "pandas" },
+    { name = "pyyaml" },
+    { name = "seaborn" },
+    { name = "tqdm" },
+]
+viz = [
+    { name = "matplotlib" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "jupyter", marker = "extra == 'experiments'", specifier = ">=1.0" },
+    { name = "matplotlib", marker = "extra == 'viz'", specifier = ">=3.7" },
+    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.7" },
+    { name = "nbconvert", marker = "extra == 'experiments'", specifier = ">=7.0" },
+    { name = "nbstripout", marker = "extra == 'experiments'", specifier = ">=0.7" },
+    { name = "notebook", marker = "extra == 'experiments'", specifier = ">=7.0" },
+    { name = "numpy", specifier = ">=1.24" },
+    { name = "pandas", marker = "extra == 'experiments'", specifier = ">=2.0" },
+    { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.5" },
+    { name = "pymetis", specifier = ">=2025.2" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.4" },
+    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=4.1" },
+    { name = "pyyaml", marker = "extra == 'experiments'", specifier = ">=6.0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.1" },
+    { name = "scikit-learn", specifier = ">=1.6" },
+    { name = "scipy", specifier = ">=1.11" },
+    { name = "seaborn", marker = "extra == 'experiments'", specifier = ">=0.13" },
+    { name = "tqdm", marker = "extra == 'experiments'", specifier = ">=4.65" },
+]
+provides-extras = ["viz", "experiments", "dev"]
+
+[[package]]
 name = "charset-normalizer"
 version = "3.4.7"
 source = { registry = "https://pypi.org/simple" }
@@ -2027,62 +2083,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/cd/05/0a34433a064256a57
 wheels = [
     { url = "https://files.pythonhosted.org/packages/8e/37/efad0257dc6e593a18957422533ff0f87ede7c9c6ea010a2177d738fb82f/pure_eval-0.2.3-py3-none-any.whl", hash = "sha256:1db8e35b67b3d218d818ae653e27f06c3aa420901fa7b081ca98cbedc874e0d0", size = 11842, upload-time = "2024-07-21T12:58:20.04Z" },
 ]
-
-[[package]]
-name = "pychameleon"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "numpy" },
-    { name = "pymetis" },
-    { name = "scikit-learn" },
-    { name = "scipy" },
-]
-
-[package.optional-dependencies]
-dev = [
-    { name = "mypy" },
-    { name = "pre-commit" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "ruff" },
-]
-experiments = [
-    { name = "jupyter" },
-    { name = "nbconvert" },
-    { name = "nbstripout" },
-    { name = "notebook" },
-    { name = "pandas" },
-    { name = "pyyaml" },
-    { name = "seaborn" },
-    { name = "tqdm" },
-]
-viz = [
-    { name = "matplotlib" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "jupyter", marker = "extra == 'experiments'", specifier = ">=1.0" },
-    { name = "matplotlib", marker = "extra == 'viz'", specifier = ">=3.7" },
-    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.7" },
-    { name = "nbconvert", marker = "extra == 'experiments'", specifier = ">=7.0" },
-    { name = "nbstripout", marker = "extra == 'experiments'", specifier = ">=0.7" },
-    { name = "notebook", marker = "extra == 'experiments'", specifier = ">=7.0" },
-    { name = "numpy", specifier = ">=1.24" },
-    { name = "pandas", marker = "extra == 'experiments'", specifier = ">=2.0" },
-    { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.5" },
-    { name = "pymetis", specifier = ">=2023.1" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.4" },
-    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=4.1" },
-    { name = "pyyaml", marker = "extra == 'experiments'", specifier = ">=6.0" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.1" },
-    { name = "scikit-learn", specifier = ">=1.3" },
-    { name = "scipy", specifier = ">=1.11" },
-    { name = "seaborn", marker = "extra == 'experiments'", specifier = ">=0.13" },
-    { name = "tqdm", marker = "extra == 'experiments'", specifier = ">=4.65" },
-]
-provides-extras = ["viz", "experiments", "dev"]
 
 [[package]]
 name = "pycparser"

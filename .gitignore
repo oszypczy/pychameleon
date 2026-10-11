@@ -51,3 +51,7 @@ external/chameleon_cluster_reference/
 # Temporary files
 /tmp/
 *.log
+
+# Course materials and third-party papers (kept locally, not published)
+docs/presentation/
+docs/*.pdf

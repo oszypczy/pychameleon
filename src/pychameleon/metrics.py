@@ -18,44 +18,36 @@ from __future__ import annotations
 import numpy as np
 import pymetis
 
-from pychameleon._types import AdjacencyList, EdgeWeights, Labels
+from pychameleon._types import AdjacencyList, BisectorCache, EdgeWeights, Labels
 
 _WEIGHT_QUANTIZATION = 1_000_000
 _MAX_INT_WEIGHT = 2_000_000_000
-
-
-# Per-fit cache for internal bisector statistics. Keyed by frozenset of node
-# ids; this avoids re-bisecting the same sub-cluster every time it's involved
-# in a merge-score computation. Cleared explicitly at the start of fit() so
-# the cache doesn't leak across calls.
-_internal_bisector_cache: dict[frozenset[int], tuple[float, float]] = {}
-
-
-def reset_cache() -> None:
-    """Clear the internal-bisector cache. Call at the start of each fit()."""
-    _internal_bisector_cache.clear()
 
 
 def _internal_bisector(
     adjacency: AdjacencyList,
     edge_weights: EdgeWeights,
     cluster_nodes: np.ndarray,
+    cache: BisectorCache,
 ) -> tuple[float, float]:
     """Bisect ``cluster_nodes`` and return (cut_weight_sum, mean_cut_weight).
 
     A cluster's "internal interconnectivity" |EC_C| is the summed weight of
     edges crossing a min-cut bisection of its induced sub-graph. The mean is
     used by RC's denominator.
+
+    Results are memoized in ``cache`` (keyed by the node set) so the same
+    sub-cluster isn't re-bisected every time it's scored against a neighbor.
     """
     key = frozenset(int(n) for n in cluster_nodes)
-    cached = _internal_bisector_cache.get(key)
+    cached = cache.get(key)
     if cached is not None:
         return cached
 
     n_sub = cluster_nodes.shape[0]
     if n_sub < 2:
         result = (0.0, 0.0)
-        _internal_bisector_cache[key] = result
+        cache[key] = result
         return result
 
     global_to_local = {int(g): i for i, g in enumerate(cluster_nodes)}
@@ -77,13 +69,12 @@ def _internal_bisector(
 
     if not adjncy:
         result = (0.0, 0.0)
-        _internal_bisector_cache[key] = result
+        cache[key] = result
         return result
 
     _, membership = pymetis.part_graph(
         2,
-        xadj=xadj,
-        adjncy=adjncy,
+        adjacency=pymetis.CSRAdjacency(adj_starts=xadj, adjacent=adjncy),
         eweights=eweights,
     )
     membership_arr = np.asarray(membership, dtype=np.int64)
@@ -103,7 +94,7 @@ def _internal_bisector(
     mean_cut = cut_total / cut_count if cut_count > 0 else 0.0
 
     result = (cut_total, mean_cut)
-    _internal_bisector_cache[key] = result
+    cache[key] = result
     return result
 
 
@@ -131,6 +122,7 @@ def relative_interconnectivity(
     labels: Labels,
     cluster_i: int,
     cluster_j: int,
+    cache: BisectorCache | None = None,
 ) -> float:
     """Compute RI(Ci, Cj) = |EC_{Ci,Cj}| / ((|EC_Ci| + |EC_Cj|) / 2).
 
@@ -138,6 +130,8 @@ def relative_interconnectivity(
     the denominator is the average of the internal inter-connectivities
     (bisector edge-cut sums) of the two clusters.
     """
+    if cache is None:
+        cache = {}
     cross = _cross_edges(adjacency, edge_weights, labels, cluster_i, cluster_j)
     cross_sum = float(cross.sum())
     if cross_sum == 0.0:
@@ -145,8 +139,8 @@ def relative_interconnectivity(
 
     nodes_i = np.where(labels == cluster_i)[0]
     nodes_j = np.where(labels == cluster_j)[0]
-    ec_i, _ = _internal_bisector(adjacency, edge_weights, nodes_i)
-    ec_j, _ = _internal_bisector(adjacency, edge_weights, nodes_j)
+    ec_i, _ = _internal_bisector(adjacency, edge_weights, nodes_i, cache)
+    ec_j, _ = _internal_bisector(adjacency, edge_weights, nodes_j, cache)
 
     denom = (ec_i + ec_j) / 2.0
     if denom == 0.0:
@@ -160,12 +154,15 @@ def relative_closeness(
     labels: Labels,
     cluster_i: int,
     cluster_j: int,
+    cache: BisectorCache | None = None,
 ) -> float:
     """Compute RC(Ci, Cj) from eq. (2).
 
     Ratio of mean edge weight across the Ci-Cj boundary to the size-weighted
     mean of the two clusters' internal bisector edge weights.
     """
+    if cache is None:
+        cache = {}
     cross = _cross_edges(adjacency, edge_weights, labels, cluster_i, cluster_j)
     if cross.size == 0:
         return 0.0
@@ -173,8 +170,8 @@ def relative_closeness(
 
     nodes_i = np.where(labels == cluster_i)[0]
     nodes_j = np.where(labels == cluster_j)[0]
-    _, mean_i = _internal_bisector(adjacency, edge_weights, nodes_i)
-    _, mean_j = _internal_bisector(adjacency, edge_weights, nodes_j)
+    _, mean_i = _internal_bisector(adjacency, edge_weights, nodes_i, cache)
+    _, mean_j = _internal_bisector(adjacency, edge_weights, nodes_j, cache)
 
     size_i = nodes_i.shape[0]
     size_j = nodes_j.shape[0]
@@ -191,16 +188,22 @@ def merge_score(
     cluster_i: int,
     cluster_j: int,
     alpha: float,
+    cache: BisectorCache | None = None,
 ) -> float:
     """Compute RI(Ci, Cj) * RC(Ci, Cj)**alpha (eq. 4).
 
     ``alpha > 1`` biases toward closeness; ``alpha < 1`` toward
     interconnectivity. The original paper uses ``alpha = 2.0``.
+
+    Pass the same ``cache`` across calls within one clustering run to reuse
+    internal-bisector results; ``None`` uses a throwaway cache.
     """
-    ri = relative_interconnectivity(adjacency, edge_weights, labels, cluster_i, cluster_j)
+    if cache is None:
+        cache = {}
+    ri = relative_interconnectivity(adjacency, edge_weights, labels, cluster_i, cluster_j, cache)
     if ri == 0.0:
         return 0.0
-    rc = relative_closeness(adjacency, edge_weights, labels, cluster_i, cluster_j)
+    rc = relative_closeness(adjacency, edge_weights, labels, cluster_i, cluster_j, cache)
     if rc == 0.0:
         return 0.0
     return float(ri * (rc**alpha))
