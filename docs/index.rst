@@ -42,7 +42,9 @@ Citing
 ------
 
 If you use chameleon-cluster in your work, please cite the original paper
-and this software; citation metadata is in
+and this software, archived on Zenodo as
+`doi:10.5281/zenodo.23304753 <https://doi.org/10.5281/zenodo.23304753>`_
+(this DOI always resolves to the latest version). Citation metadata is in
 `CITATION.cff <https://github.com/oszypczy/pychameleon/blob/main/CITATION.cff>`_
 (GitHub shows a *Cite this repository* button for it).
 

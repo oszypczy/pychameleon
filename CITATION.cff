@@ -9,6 +9,7 @@ authors:
   - family-names: Szypczyn
     given-names: Oliwier
 version: 0.1.2
+doi: 10.5281/zenodo.23304753
 date-released: 2026-10-11
 license: MIT
 repository-code: "https://github.com/oszypczy/pychameleon"

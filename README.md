@@ -3,6 +3,7 @@
 [![PyPI](https://img.shields.io/pypi/v/chameleon-cluster)](https://pypi.org/project/chameleon-cluster/)
 [![CI](https://github.com/oszypczy/pychameleon/actions/workflows/ci.yml/badge.svg)](https://github.com/oszypczy/pychameleon/actions/workflows/ci.yml)
 [![Docs](https://img.shields.io/readthedocs/chameleon-cluster)](https://chameleon-cluster.readthedocs.io)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23304753.svg)](https://doi.org/10.5281/zenodo.23304753)
 
 **Documentation:** https://chameleon-cluster.readthedocs.io
 
@@ -70,8 +71,8 @@ uv run mypy src/        # type check
 ## Citing
 
 If you use this package, please cite the original paper (above) and this
-software — see [`CITATION.cff`](CITATION.cff) or the *Cite this repository*
-button on GitHub.
+software (DOI [10.5281/zenodo.23304753](https://doi.org/10.5281/zenodo.23304753)) — see
+[`CITATION.cff`](CITATION.cff) or the *Cite this repository* button on GitHub.
 
 ## License
 
