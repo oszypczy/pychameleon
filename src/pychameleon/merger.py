@@ -14,7 +14,7 @@ import heapq
 
 import numpy as np
 
-from pychameleon._types import AdjacencyList, EdgeWeights, Labels
+from pychameleon._types import AdjacencyList, BisectorCache, EdgeWeights, Labels
 from pychameleon.metrics import merge_score
 
 
@@ -60,6 +60,9 @@ def merge_to_k_clusters(
     if len(active_clusters) <= n_clusters:
         return _densify_labels(labels)
 
+    # Internal-bisector memo shared by every score computed in this run.
+    cache: BisectorCache = {}
+
     # Version counter per cluster id; bumped on every merge that involves it.
     version = dict.fromkeys(active_clusters, 0)
 
@@ -69,7 +72,7 @@ def merge_to_k_clusters(
 
     def push_pair(a: int, b: int) -> None:
         a_, b_ = (a, b) if a < b else (b, a)
-        score = merge_score(adjacency, edge_weights, labels, a_, b_, alpha)
+        score = merge_score(adjacency, edge_weights, labels, a_, b_, alpha, cache)
         if score > 0.0:
             heapq.heappush(heap, (-score, version[a_], version[b_], a_, b_))
 

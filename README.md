@@ -10,10 +10,12 @@ CHAMELEON discovers clusters of arbitrary shapes, densities, and sizes by using 
 ## Installation
 
 ```bash
-uv add pychameleon        # with uv
+uv add chameleon-cluster        # with uv
 # or
-pip install pychameleon   # with pip
+pip install chameleon-cluster   # with pip
 ```
+
+The distribution is named `chameleon-cluster`; the import name is `pychameleon`.
 
 ## Quick start
 

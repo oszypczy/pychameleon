@@ -25,3 +25,7 @@ AdjacencyList: TypeAlias = list[NDArray[np.int64]]
 # Edge weights aligned with AdjacencyList: `edge_weights[i][j]` is the weight
 # of the edge from node `i` to its j-th neighbor `adjacency[i][j]`.
 EdgeWeights: TypeAlias = list[NDArray[np.float64]]
+
+# Memo of internal-bisector statistics (cut_weight_sum, mean_cut_weight),
+# keyed by the node set of a sub-cluster. Owned by a single fit() call.
+BisectorCache: TypeAlias = dict[frozenset[int], tuple[float, float]]

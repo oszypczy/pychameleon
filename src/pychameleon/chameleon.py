@@ -19,7 +19,7 @@ from sklearn.base import BaseEstimator, ClusterMixin
 from sklearn.utils._param_validation import Interval
 from sklearn.utils.validation import validate_data
 
-from pychameleon import graph, merger, metrics, partition
+from pychameleon import graph, merger, partition
 from pychameleon._types import Labels
 
 
@@ -130,10 +130,6 @@ class Chameleon(ClusterMixin, BaseEstimator):  # type: ignore[misc]
         # Cap k_nn at n_samples - 1 so very small inputs still work (sklearn's
         # check_estimator hits this with n=10 against the default k_nn=10).
         effective_k = min(self.k_nn, max(1, n_samples - 1))
-
-        # Reset the per-fit cache so internal-bisector results don't leak
-        # across calls or estimator instances.
-        metrics.reset_cache()
 
         # Phase 0: build sparse k-NN graph (§4.2)
         adjacency, edge_weights = graph.knn_graph(X_arr, effective_k)

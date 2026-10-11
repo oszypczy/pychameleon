@@ -6,6 +6,8 @@ implemented.
 """
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import pytest
 
@@ -99,7 +101,8 @@ class TestChameleonEndToEnd:
         assert len(np.unique(labels)) == 7
 
         reference_labels = np.loadtxt(
-            "benchmarks/reference_moonpuck/aggregation/labels.csv",
+            Path(__file__).resolve().parent.parent
+            / "benchmarks/reference_moonpuck/aggregation/labels.csv",
             delimiter=",",
             skiprows=1,
             usecols=(2,),

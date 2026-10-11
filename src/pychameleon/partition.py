@@ -96,8 +96,7 @@ def _bisect(
 
     _, membership = pymetis.part_graph(
         2,
-        xadj=xadj,
-        adjncy=adjncy,
+        adjacency=pymetis.CSRAdjacency(adj_starts=xadj, adjacent=adjncy),
         eweights=eweights,
     )
     membership_arr = np.asarray(membership, dtype=np.int64)
