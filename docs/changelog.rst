@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.1.1 (2026-10-11)
+------------------
+
+Documentation and packaging only — no changes to the algorithm or API.
+
+- Documentation published at https://chameleon-cluster.readthedocs.io
+- PyPI page now links to the documentation and shows the updated README.
+
 0.1.0 (2026-10-11)
 ------------------
 
